@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluate charge density at the atomic nuclei &mdash; pymolpro 1.3.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Extract pair correlation energies" href="pair_correlation_energies.html" />
+    <link rel="prev" title="Potential energy surface for twisting of ethene" href="dihedral_scan.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pymolpro
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">pymolpro</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="thermochemical_benchmark_for_methods.html">Closed shell reactions with core correlation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dihedral_scan.html">Potential energy surface for twisting of ethene</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Evaluate charge density at the atomic nuclei</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Do-an-electronic-structure-calculation">Do an electronic structure calculation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Evaluate-occupied-orbitals-then-density-on-a-grid-at-the-nuclear-positions">Evaluate occupied orbitals then density on a grid at the nuclear positions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Check-that-the-densities-at-the-nuclei-agree-with-values-calculated-directly-in-Molpro">Check that the densities at the nuclei agree with values calculated directly in Molpro</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pair_correlation_energies.html">Extract pair correlation energies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry_optimisation.html">Optimise and view the structure of ammonia dimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitor_geometry_optimisation.html">Monitor progress of geometry optimisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="molpro_variables.html">Extract results held in Molpro variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbital.html">Generation and use of an orbital-based grid</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pymolpro</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Evaluate charge density at the atomic nuclei</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/evaluate_charge_density.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Evaluate-charge-density-at-the-atomic-nuclei">
+<h1>Evaluate charge density at the atomic nuclei<a class="headerlink" href="#Evaluate-charge-density-at-the-atomic-nuclei" title="Permalink to this heading"></a></h1>
+<section id="Do-an-electronic-structure-calculation">
+<h2>Do an electronic structure calculation<a class="headerlink" href="#Do-an-electronic-structure-calculation" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from pymolpro import Project
+
+p = Project(&quot;evaluate_charge_density&quot;)
+p.write_input(&#39;basis,cc-pVQZ;geometry={f;h,f,1.732};set,sewprop=0;gexpec,delta,f;gexpec,delta,h;rks,pbe0;put,xml&#39;)
+p.run(wait=True)
+assert p.status == &#39;completed&#39;
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Evaluate-occupied-orbitals-then-density-on-a-grid-at-the-nuclear-positions">
+<h2>Evaluate occupied orbitals then density on a grid at the nuclear positions<a class="headerlink" href="#Evaluate-occupied-orbitals-then-density-on-a-grid-at-the-nuclear-positions" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+
+atoms = p.geometry();
+print(str(len(atoms)) + &#39; atoms:&#39;)
+for atom in atoms:
+    print(atom[&#39;id&#39;], atom[&#39;elementType&#39;], atom[&#39;xyz&#39;])
+
+points = [atom[&#39;xyz&#39;] for atom in atoms]
+orbitalsAtPoints = p.evaluateOrbitals(points)
+
+results = np.zeros(len(points), dtype=np.float64)
+for orbital in orbitalsAtPoints:
+    for ipoint in range(len(orbital[&#39;values&#39;])):
+        results[ipoint] += orbital[&#39;values&#39;][ipoint] ** 2 * orbital[&#39;occ&#39;]
+
+print(&quot;Calculated densities at the nuclei:&quot;, results)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2 atoms:
+a1 F [0.0, 0.0, -0.08725992951335484]
+a2 H [0.0, 0.0, 1.644740070486644]
+Calculated densities at the nuclei: [4.38900148e+02 4.14546918e-01]
+</pre></div></div>
+</div>
+</section>
+<section id="Check-that-the-densities-at-the-nuclei-agree-with-values-calculated-directly-in-Molpro">
+<h2>Check that the densities at the nuclei agree with values calculated directly in Molpro<a class="headerlink" href="#Check-that-the-densities-at-the-nuclei-agree-with-values-calculated-directly-in-Molpro" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for answer in p.xpath(&#39;//property[contains(@name,&quot;DELTA&quot;)]&#39;):
+    name = answer.xpath(&#39;@name&#39;)[0]
+    value = float(answer.xpath(&#39;@value&#39;)[0])
+    print(&#39;From Molpro:&#39;, name, &#39;=&#39;, value)
+    closest = (np.abs((results - value))).argmin()
+    print(&#39;... nearest to result &#39;, closest, &#39; which differs by &#39;, results[closest] - value)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+From Molpro: DELTA(F) = 438.90014827795
+... nearest to result  0  which differs by  -5.115907697472721e-13
+From Molpro: DELTA(H) = 0.414546917881728
+... nearest to result  1  which differs by  1.0547118733938987e-15
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dihedral_scan.html" class="btn btn-neutral float-left" title="Potential energy surface for twisting of ethene" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pair_correlation_energies.html" class="btn btn-neutral float-right" title="Extract pair correlation energies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Marat Sibaev, Peter Knowles.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,6 +1,14 @@
 pymolpro package
 ================
 
+Module contents
+---------------
+
+.. automodule:: pymolpro
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,18 +21,26 @@ pymolpro.project module
    :show-inheritance:
    :inherited-members:
 
-pymolpro.node\_xml module
+pymolpro.database module
 -------------------------
 
-.. automodule:: pymolpro.node_xml
+.. automodule:: pymolpro.database
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+pymolpro.grid module
+-------------------------
 
-.. automodule:: pymolpro
+.. automodule:: pymolpro.grid
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pymolpro.node\_xml module
+-------------------------
+
+.. automodule:: pymolpro.node_xml
    :members:
    :undoc-members:
    :show-inheritance:
