@@ -44,7 +44,7 @@
       ]
     },
     "method": {
-      "description": "The quantum-chemical method used",
+      "description": "The quantum-chemical method used, expressed as the Molpro input command that specifies it. Normally, this will be usual university acronym, for example CCSD(T), but it might be qualified by options separated by commas. In the case of Kohn-Sham density-functional theory, for example, this would be 'ks,B3LYP'.  Where the method needs two or more Molpro commands, a list of strings can be given. For the special case of correlated wavefunction methods that need Hartree-Fock orbitals, if not specified, HF will be inserted - so one could specify ['hf','ccsd(t)'], but it's enough to give just 'ccsd(t)'.",
       "default": "hf",
       "oneOf": [
         {
@@ -59,7 +59,7 @@
       ]
     },
     "geometry_method": {
-      "description": "The quantum-chemical method used to optimise the geometry",
+      "description": "The quantum-chemical method used to optimise the geometry.",
       "oneOf": [
         {
           "type": "string"

@@ -26,6 +26,19 @@ def test_file(methods, tmpdir):
     assert InputSpecification(test_text).without_defaults == InputSpecification(test_file).without_defaults
 
 
+def test_steps(methods):
+    from pymolpro.molpro_input import JobStep
+    for spec, expected in {
+        '{"geometry":"f;h,f,1.7","method":"hf"}' : ['hf'],
+        '{"geometry":"f;h,f,1.7","method":"ccsd"}' : ['hf','ccsd'],
+        '{"geometry":"f;h,f,1.7","method":"ccsd", "job_type": "OPT"}' : ['hf','ccsd','optg,savexyz=optimised.xyz'],
+        '{"geometry":"f;h,f,1.7","geometry_method":"ks,b3lyp","method":"ccsd", "job_type": "OPT"}' : ['ks,b3lyp','optg,savexyz=optimised.xyz','hf','ccsd'],
+        '{"geometry":"f;h,f,1.7","method":"ccsd", "job_type": "OPT", "geometry_basis":"6-31G*"}' : ['hf','ccsd','optg,savexyz=optimised.xyz','hf','ccsd'],
+        '{"geometry":"f;h,f,1.7","geometry_method":"ks,b3lyp","method":"ccsd", "job_type": "OPT+FREQ"}' : ['ks,b3lyp','optg,savexyz=optimised.xyz','frequencies;thermo','hf','ccsd'],
+    }.items():
+        s = InputSpecification(specification=json.loads(spec))
+        assert s.job_steps == [JobStep(e) for e in expected]
+
 def test_create_input(methods):
     for spec in [
         {'geometry': 'F\nH,F,1.7',

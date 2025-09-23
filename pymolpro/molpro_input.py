@@ -307,16 +307,29 @@ class InputSpecification(UserDict):
         r"""
         Returns the job steps in this input
         """
+        return self.get_job_steps()
+
+    def get_job_steps(self, initial_commands=True, geometry_commands=True, job_type_commands=True, commands=True):
         job_steps = []
         defaulted = self.with_defaults
-        if 'method' in defaulted:
-            if type(defaulted['method']) is list:
-                for method_step in defaulted['method']:
-                    job_steps.append(JobStep(method_step))
-            else:
-                job_steps.append(JobStep(defaulted['method']))
-        for step in defaulted['job_type_commands'][defaulted['job_type']]:
-            job_steps.append(JobStep(step))
+        method_key = 'method' if (defaulted['job_type'][:3] != 'OPT' or (
+                 defaulted['geometry_method']==defaulted['method']
+         and
+                 defaulted['geometry_basis']==defaulted['basis']
+        )) else 'geometry_method'
+        if method_key in defaulted:
+            methods = [m.lower() for m in defaulted[method_key]] if type(defaulted[method_key]) == list else [defaulted[method_key]]
+            if methods[0].split(',')[0] not in ['hf', 'rhf', 'uhf', 'ks', 'rks', 'uks', 'avas'] and initial_commands:
+                methods = ['hf'] + methods
+            if geometry_commands:
+                for step in methods:
+                    job_steps.append(JobStep(step.lower()))
+        if job_type_commands:
+            for step in defaulted['job_type_commands'][defaulted['job_type']]:
+                job_steps.append(JobStep(step))
+        if commands and defaulted['job_type'][:3] == 'OPT' and method_key != 'method':
+            for step in defaulted['method']:
+                job_steps.append(JobStep(step.lower()))
         return job_steps
 
     def set_job_step(self, job_step: JobStep, index: int):
