@@ -12,7 +12,7 @@ import threading
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['Database', 'load', 'run', 'analyse', 'basis_extrapolate', 'units']
+__all__ = ['Database', 'load', 'run', 'analyse', 'basis_extrapolate', 'units', 'remove_project_directory']
 
 # pysjef's Project.run() releases the GIL for the duration of the underlying C++ call, which
 # does chdir()/fork()/execve() to launch the job. chdir() is process-global, not per-thread, so
@@ -21,6 +21,37 @@ __all__ = ['Database', 'load', 'run', 'analyse', 'basis_extrapolate', 'units']
 # first has forked, causing the first job to be launched in the wrong directory. Serializing just
 # the launch call (not the wait that follows) avoids this while keeping jobs running in parallel.
 _launch_lock = threading.Lock()
+
+
+def remove_project_directory(path, attempts=6, initial_delay=0.05):
+    r"""
+    Like shutil.rmtree(), but tolerant of the directory turning up non-empty at the final rmdir()
+    even though every file in it was just individually removed moments before. Observed
+    intermittently, only when other real Molpro jobs have run earlier in the same process: some
+    file reappears in the tree between shutil.rmtree()'s directory listing and its final rmdir()
+    call, too fast to catch with diagnostics (adding any -- a wrapper, a stat() poll -- reliably
+    made the race stop reproducing, suggesting the window is a matter of milliseconds). This
+    machine has separately, directly confirmed antivirus/backup software (Time Machine) intercepting
+    rapid file create-then-rename sequences during this same investigation; a project bundle being
+    torn down is exactly that pattern, repeated across every file sjef ever wrote for it. Retrying
+    the whole rmtree() is safe here (nothing this process still cares about lives under `path`) and
+    matches the same retry-on-transient-io-error philosophy already used throughout sjef itself.
+    """
+    import errno
+    import shutil
+    import time
+    delay = initial_delay
+    for attempt in range(1, attempts + 1):
+        try:
+            shutil.rmtree(path)
+            return
+        except OSError as e:
+            if e.errno != errno.ENOTEMPTY or attempt >= attempts:
+                raise
+            logger.warning("remove_project_directory(%s): directory non-empty at removal (attempt %d/%d), "
+                          "retrying: %s", path, attempt, attempts, e)
+            time.sleep(delay)
+            delay *= 2
 
 
 class Database:
@@ -567,7 +598,6 @@ def run(db, ansatz=None, specification=None, location=".", parallel=None, backen
         __parallel = cpu_count()
     else:
         __parallel = parallel
-    from shutil import rmtree
     import hashlib
     from multiprocessing.dummy import Pool
     from pymolpro import Project
@@ -710,7 +740,7 @@ def run(db, ansatz=None, specification=None, location=".", parallel=None, backen
     newdb.calculate_reaction_energies(check)
     if clean:
         newdb.projects = {}
-        rmtree(newdb.project_directory)
+        remove_project_directory(newdb.project_directory)
         newdb.project_directory = None
 
     return newdb

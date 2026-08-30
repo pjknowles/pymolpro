@@ -5,7 +5,6 @@ import pandas
 from pymolpro import database
 from pymolpro.database import Database
 import os
-import shutil
 
 
 class TestDatabase(unittest.TestCase):
@@ -169,7 +168,7 @@ F          0.0000000000        0.0000000000        3.6683721829"""
 
             result = database.run(db, method='hf', basis='minao')
             self.assertFalse(result.failed)
-            shutil.rmtree(result.project_directory)
+            database.remove_project_directory(result.project_directory)
 
             print('try prologue small memory')
             try:
@@ -179,7 +178,7 @@ F          0.0000000000        0.0000000000        3.6683721829"""
                 self.assertEqual(result.failed['HF'].status, 'failed')
             except Exception:
                 pass
-            shutil.rmtree(result.project_directory)
+            database.remove_project_directory(result.project_directory)
 
             try:
                 result = database.run(db, method='hf', prologue='charge=-10', basis='cc-pvdz')
@@ -188,7 +187,7 @@ F          0.0000000000        0.0000000000        3.6683721829"""
             self.assertTrue(result.failed)
             self.assertNotEqual(len(result.failed), 0)
             self.assertEqual(result.failed['HF'].status, 'failed')
-            shutil.rmtree(result.project_directory)
+            database.remove_project_directory(result.project_directory)
 
             try:
                 result = database.run(db, method='bad-method', basis='minao')
@@ -197,7 +196,7 @@ F          0.0000000000        0.0000000000        3.6683721829"""
             self.assertNotEqual(len(result.failed), 0)
             # self.assertEqual(result.failed['HF'].status, 'failed')
             try:
-                shutil.rmtree(result.project_directory)
+                database.remove_project_directory(result.project_directory)
             except Exception:
                 pass
 
@@ -221,7 +220,7 @@ F          0.0000000000        0.0000000000        3.6683721829"""
                 self.assertEqual(
                     results.projects['H2'].input_specification.with_defaults['basis']['default'].upper(), 'MINAO')
             finally:
-                shutil.rmtree(results.project_directory)
+                database.remove_project_directory(results.project_directory)
 
     def test_subset(self):
         db = database.load('sample')
@@ -299,7 +298,7 @@ F          0.0000000000        0.0000000000        3.6683721829"""
             first_filename = newdb.projects['H2'].filename()
             newdb = pymolpro.database.run(db, check=False)
             second_filename = newdb.projects['H2'].filename()
-            shutil.rmtree(newdb.project_directory)
+            database.remove_project_directory(newdb.project_directory)
             self.assertEqual(first_filename,
                              second_filename)  # because the second run should not have been done because input identical
 
